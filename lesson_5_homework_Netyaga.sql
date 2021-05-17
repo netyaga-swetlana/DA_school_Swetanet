@@ -3,7 +3,7 @@
 
 --task1 (lesson5)
 -- Компьютерная фирма: Сделать view (pages_all_products), в которой будет постраничная разбивка всех продуктов (не более двух продуктов на одной странице). Вывод: все данные из laptop, номер страницы, список всех страниц
-		 select max (nm)/2
+		/*** select max (nm)/2
 		 from (
 		 select code, type, maker, price, model
 		,row_number () over (order by code desc) as nm
@@ -31,8 +31,27 @@ SELECT model, maker, price, type
 		union all
 		select p1.code, p1. price, p.type, p.maker, p.model
 		from product p join laptop p1 on p.model=p1.model ) b
+		***/
 
-   
+create view pages_all_products
+as
+select model, maker, price, type
+        ,b.rn/2 + 1 as page_num
+        ,(max(B.rn/2) over (partition by null)) + 1 as max_page
+        ,(min(B.rn/2) over (partition by null)) + 1 || '...' || (max(B.rn/2) over (partition by null)) + 1 as page_range 
+ from (
+		 SELECT model, maker, price, type
+		       ,(row_number() over (partition by null) - 1) as rn
+		 FROM (
+				select p1.code, p1. price, p.type, p.maker, p.model
+				from product p join pc p1 on p.model=p1.model 
+				union all
+				select p1.code, p1. price, p.type, p.maker, p.model
+				from product p join printer p1 on p.model=p1.model 
+				union all
+				select p1.code, p1. price, p.type, p.maker, p.model
+				from product p join laptop p1 on p.model=p1.model ) a
+		) b
 	
 --task2 (lesson5)
 -- Компьютерная фирма: Сделать view (distribution_by_type), в рамках которого будет процентное соотношение всех товаров по типу устройства. Вывод: производитель,
