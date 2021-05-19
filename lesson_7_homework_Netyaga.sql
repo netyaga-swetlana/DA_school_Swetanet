@@ -21,9 +21,11 @@ where salary >salary_m
 
 --task4  (lesson7)
 -- oracle: https://leetcode.com/problems/rank-scores/
+# Write your MySQL query statement below
 select score
-,dense_rank()over (order by score desc)
+,dense_rank() over (order by score desc) as 'Rank'
 from scores
+
 
 --task5  (lesson7)
 -- oracle: https://leetcode.com/problems/combine-two-tables/
