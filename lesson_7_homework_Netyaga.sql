@@ -7,7 +7,7 @@
 --task2  (lesson7)
 -- oracle: https://leetcode.com/problems/duplicate-emails/
 select email
-from (select email, count(id) as cnt from person group by email)
+from (select email, count(id) as cnt from person group by email) a
 where cnt >1
 
 --task3  (lesson7)
@@ -22,11 +22,11 @@ where salary >salary_m
 --task4  (lesson7)
 -- oracle: https://leetcode.com/problems/rank-scores/
 select score
-,dense_rank()over (order by score)
+,dense_rank()over (order by score desc)
 from scores
 
 --task5  (lesson7)
 -- oracle: https://leetcode.com/problems/combine-two-tables/
-select p.FirstName,p.LastName
+select p.FirstName,p.LastName,
        a.City,a.State
 from Person p left join Address a on p.PersonID=a.PersonID
