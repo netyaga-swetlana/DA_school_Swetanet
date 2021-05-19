@@ -3,27 +3,23 @@
 
 --task1  (lesson6, дополнительно)
 -- SQL: Создайте таблицу с синтетическими данными (10000 строк, 3 колонки, все типы int) и заполните ее случайными данными от 0 до 1 000 000. Проведите EXPLAIN операции и сравните базовые операции.
-CREATE TABLE test_table_random (column_id smallint,
-								column2 SMALLINT,
-							    column3 SMALLINT);
+CREATE TABLE test_random_table (col1 int, col2 int, col3 int);
 
-DECLARE Var SMALLINT;
-DECLARE Test_Count SMALLINT = 10000;
+DECLARE @var1 int, @var2 int, @var3 int; 
+DECLARE @TestCount int; set @TestCount= 10000; 
 
-WHILE Test_Count > 0
-BEGIN
+WHILE @TestCount > 0 
+begin
+   SET @var1 = (SELECT FLOOR(RAND() * 1000000) + 1); 
+   SET @var2 = (SELECT FLOOR(RAND() * 1000000) + 1); 
+   SET @var3 = (SELECT FLOOR(RAND() * 1000000) + 1);
+   INSERT INTO test_random_table (col1, col2, col3) VALUES (@var1, @var2, @var3);
+   SET @TestCount -= 1;
+end 
 
-    SET Var = (SELECT FLOOR(RAND() * (1000000)) + 1);
-    INSERT INTO test_table_random (column_id) VALUES (Var);
-    SET Var = (SELECT FLOOR(RAND() * (1000000)) + 1);
-    INSERT INTO test_table_random (column2) VALUES (Var);
-    SET Var = (SELECT FLOOR(RAND() * (1000000)) + 1);
-    INSERT INTO test_table_random (column3) VALUES (Var);
-    SET Test_Count -= 1;
-END
-
-SELECT *
-FROM test_table_random
+EXPLAIN SELECT * FROM TEST_RANDOM_TABLE
+EXPLAIN SELECT * FROM test_random_table  WHERE col1 < 888888 AND col2 >222222
+EXPLAIN SELECT col3 FROM test_random_table  WHERE col1 < 888888 AND col2 >222222
 
 --task2 (lesson6, дополнительно)
 -- GCP (Google Cloud Platform): Через GCP загрузите данные csv в базу PSQL по личным реквизитам (используя только bash и интерфейс bash) 
